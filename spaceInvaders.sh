@@ -1,13 +1,5 @@
 #!/bin/bash
 # Piotr Wontka 167951
-clear
-echo "Piotr Wontka 167951"
-echo "Space Invaders"
-echo "Controls:"
-echo "	a - move left; d - move right; s - shoot; q - quit"
-echo "Press any key to continue"
-read -s -n 1
-
 tput civis	# hiding cursor
 
 ###################################
@@ -15,7 +7,7 @@ tput civis	# hiding cursor
 map_height=16	# map's height
 map_width=30	# map's width
 
-player_x=5	# player X position on the bottom of the map
+player_x=8	# player X position on the bottom of the map
 
 player_bullet_x=$player_x	# bullet X position
 player_bullet_y=$map_height	# bullet Y position (if it equals map_height then we can shoot)
@@ -23,11 +15,67 @@ player_bullet_y=$map_height	# bullet Y position (if it equals map_height then we
 enemies_y=1	# height at which enemies are currently on
 enemies_x=0 # width at which enemies are currently on (if enemies_x*3 is grater thanor equal to map_width then we move all rows of enemies to enemies_y+1 )
 enemies_direction=true	# true = moving right; false = moving left
-enemies_1=( true true true true true true )	# first row of enemies
-enemies_2=( true true true true true true )	# second row of enemies
-enemies_3=( true true true true true true )	# third row of enemies
+enemies_1=( false false false false false false )	# first row of enemies
+enemies_2=( false false false false false false )	# second row of enemies
+enemies_3=( false false false false false false )	# third row of enemies
 
 ##################################
+
+while getopts w:h:r: option
+do
+	regexp="^-?[0-9]+$"
+	if ! [[ $OPTARG =~ $regexp ]]; then
+		echo "Wrong parameter \"${option}\" type - it should be numeric"
+		tput cvvis	# showing cursor
+		exit 0
+	else
+		case "${option}" in
+			w) 
+				console_w=`tput cols`
+				if (( $OPTARG < 30 || $OPTARG > $console_w-1 )); then
+					echo "Width must be greater than 30 and lower than console width ($(($console_w-1)))"
+					tput cvvis	# showing cursor
+					exit 0
+				else
+					map_width=$OPTARG
+				fi;;
+			h) 
+				console_h=`tput lines`
+				if (( $OPTARG < 16 || $OPTARG > console_h-2 )); then
+					echo "Height must be greater than 16 and lower than console height ($(($console_h-2)))"
+					tput cvvis	# showing cursor
+					exit 0
+				else
+					map_height=$OPTARG
+					player_bullet_y=$map_height
+				fi;;
+			r) if (( $OPTARG < 1 || $OPTARG > 3 )); then
+					echo "Number of enemy rows must be greater than 1 and lower than 3"
+					tput cvvis	# showing cursor
+					exit 0
+				else
+					case "$OPTARG" in
+						1) enemies_1=( true true true true true true );;
+						2) enemies_1=( true true true true true true )
+						   enemies_2=( true true true true true true );;
+						3) enemies_1=( true true true true true true )
+						   enemies_2=( true true true true true true )
+						   enemies_3=( true true true true true true );;
+					esac
+				fi;;
+		esac
+	fi
+done
+
+#################################
+
+clear
+echo "Piotr Wontka 167951"
+echo "Space Invaders"
+echo "Controls:"
+echo "	a - move left; d - move right; s - shoot; q - quit"
+echo "Press any key to continue"
+read -s -n 1
 
 function draw_player() {
 	tput cup $map_height 0
@@ -90,7 +138,7 @@ function tick() {
 			enemies_x=$(($enemies_x+1))
 		fi
 	else
-		if (( $enemies_x <= 0 )); then	# if enemies are at the left border of the map (22 is the position of last enemy)
+		if (( $enemies_x <= 0 )); then	# if enemies are at the left border of the map
 			enemies_x=0
 			enemies_direction=true	# changing moving direction
 			enemies_y=$(($enemies_y+1))
