@@ -1,0 +1,32 @@
+SPACEINVADERS - PIOTR WONTKA 167951
+.TH SpaceInvaders
+.SH NAME
+SpaceInvaders - simple console game
+.SH SYNOPSIS
+.B man
+.R [ -h height ]
+.R [ -w width ]
+.R [ -r rows ]
+.SH DESCRIPTION
+Simple game that is similar to space invaders.
+You have to destroy all enemy ships. You control your ship with "a" and "d" keys (moving left and right), shoot with "s" key and exit game with "q" key. You can only shoot if your previous bullet missed (left the game map) or destroyed enemy ship (it means there can be only 1 bullet on the screen).
+If on row of enemies touches row of your ship, you lose the game. If you destroy all of the ships, you win.
+.SH DEFAULTS
+Default width of game map is 30, height is 16 and default number of enemy rows is 3.
+.SH OPTIONS
+.TP
+.B [ -w ]
+Width of game map. It must be greater than 30, and lower than console window width
+.TP
+.B [ -h ]
+Height of game map. It must be greater than 30, and lower than console window width
+.TP
+.B [ -r ]
+Number of enemy rows. It must be greater than 1, and lower than 3 (it can be used as difficulty setting).
+.SH BUGS
+.TP 
+When control keys are pressed for too long, weird things may happen: some objects can be written on the screen even though they are not supposed to be there (it is probably fault of the way that rendering objets work in this game)
+.TP
+If player destroys all of the enemy ships (which is hard ;)) then he needs to wait for a bit before the winning information shows (it is because of laziness of the author)
+.SH AUTHOR
+Piotr Wontka - 167951
