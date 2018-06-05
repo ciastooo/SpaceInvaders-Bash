@@ -15,9 +15,9 @@ player_bullet_y=$map_height	# bullet Y position (if it equals map_height then we
 enemies_y=1	# height at which enemies are currently on
 enemies_x=0 # width at which enemies are currently on (if enemies_x*3 is grater thanor equal to map_width then we move all rows of enemies to enemies_y+1 )
 enemies_direction=true	# true = moving right; false = moving left
-enemies_1=( false false false false false false )	# first row of enemies
-enemies_2=( false false false false false false )	# second row of enemies
-enemies_3=( false false false false false false )	# third row of enemies
+enemies_1=( true true true true true true )	# first row of enemies
+enemies_2=( true true true true true true )	# second row of enemies
+enemies_3=( true true true true true true )	# third row of enemies
 
 ##################################
 
@@ -55,12 +55,10 @@ do
 					exit 0
 				else
 					case "$OPTARG" in
-						1) enemies_1=( true true true true true true );;
-						2) enemies_1=( true true true true true true )
-						   enemies_2=( true true true true true true );;
-						3) enemies_1=( true true true true true true )
-						   enemies_2=( true true true true true true )
-						   enemies_3=( true true true true true true );;
+						1) enemies_3=( false false false false false false )
+						   enemies_2=( false false false false false false );;
+						2) enemies_3=( false false false false false false );;
+						3) ;;
 					esac
 				fi;;
 		esac
